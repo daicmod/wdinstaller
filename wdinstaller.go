@@ -5,6 +5,8 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"os/exec"
+	"regexp"
 	"runtime"
 	"strings"
 )
@@ -17,6 +19,7 @@ type Option struct {
 	filename       string
 	driverVersion  string
 	browserVersion string
+	baseURL        string
 	driverURL      string
 }
 
@@ -42,21 +45,6 @@ func (opt *Option) init(filename string) error {
 		opt.filename = filename
 	}
 
-	if filename == "MicrosoftWebDriver" {
-		opt.driverURL = "https://msedgedriver.azureedge.net/"
-		if opt.os != "win" {
-			opt.arch = "64"
-		}
-	} else if filename == "chromedriver" {
-		opt.driverURL = "https://chromedriver.storage.googleapis.com/"
-		if opt.os == "win" {
-			opt.arch = "32"
-		} else {
-			opt.arch = "64"
-		}
-	} else {
-		return errors.New("NOT SUPPORTED DRIVER")
-	}
 	return nil
 }
 
@@ -76,4 +64,14 @@ func downloadDriver(filepath string, url string) error {
 	_, err = io.Copy(out, res.Body)
 
 	return err
+}
+
+func getVersionExec(command string, args ...string) string {
+	out, _ := exec.Command(command, args...).Output()
+	if len(out) != 0 {
+		r := regexp.MustCompile(`[\d*\.]+`)
+		return r.FindAllStringSubmatch(string(out), 1)[0][0]
+	} else {
+		return ""
+	}
 }

@@ -1,4 +1,3 @@
-/app
-/edgedriver_win64.zip
-/msedgedriver.exe
-/__debug_bin.exe
+chromedriver.exe
+MicrosoftWebDriver.exe
+geckodriver.exe
