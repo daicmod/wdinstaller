@@ -36,7 +36,7 @@ func main() {
 ## Instalation
 
 ```
-$ go install github.com/daicmod/wdinstaller@latest
+$ go get github.com/daicmod/wdinstaller@latest
 ```
 
 ## License
